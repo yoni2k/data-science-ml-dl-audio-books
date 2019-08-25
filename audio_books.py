@@ -46,31 +46,35 @@ MAX_NUM_EPOCHS = 1000
 class config:
     loops_per_model = 5
 
-    validate_loss_improve_deltas = [0.0001, 0.00001]
+    # validate_loss_improve_deltas = [0.0001, 0.00001]
+    validate_loss_improve_deltas = [0.0001]
 
     # validate_loss_improve_patiences = [7, 10, 15]
-    validate_loss_improve_patiences = [10, 15]
+    validate_loss_improve_patiences = [7]
 
     improve_restore_best_weights_values = [True]
 
-    batch_sizes = [200, 400, 600]
+    # batch_sizes = [200, 400, 600]
+    batch_sizes = [100]
 
-    hidden_widths = [200, 450, 784]
+    # hidden_widths = [200, 450, 784]
+    hidden_widths = [100]
 
-    nums_layers = [4, 5]
+    nums_layers = [4]
 
     functions = ['sigmoid', 'tanh', 'relu', 'softmax']
-    functions = ['sigmoid', 'tanh', 'relu']
+    # functions = ['sigmoid', 'tanh', 'relu']
 
     #learning_rates = [0.001, 0.0005, 0.00001]  # default in tf.keras.optimizers.Adam is 0.001
-    learning_rates = [0.001, 0.0005]  # default in tf.keras.optimizers.Adam is 0.001
+    # learning_rates = [0.001, 0.0005]  # default in tf.keras.optimizers.Adam is 0.001
+    learning_rates = [0.001]  # default in tf.keras.optimizers.Adam is 0.001
 
 def acquire_preprocess_data():
     np.set_printoptions(formatter={'float': lambda x: "{0: 0.2f}".format(x)}, linewidth=120)
 
     raw_data = np.loadtxt(INPUT_FILE, delimiter=',')
     data = raw_data[:, 1:]
-    print(f'===================== beginning of data no index:\n{data[:5, :]}')
+    # print(f'===================== beginning of data no index:\n{data[:5, :]}')
 
     return data
 
@@ -79,7 +83,7 @@ def shuffle_data(data):
     shuffled_indices = np.arange(data.shape[0])
     np.random.shuffle(shuffled_indices)
     data = data[shuffled_indices]
-    print(f'===================== beginning of shuffled data:\n{data[:5, :]}')
+    # print(f'===================== beginning of shuffled data:\n{data[:5, :]}')
     return data
 
 
@@ -100,16 +104,16 @@ def prepare_write_data(data):
                 indices_to_remove.append(i)
 
     data = np.delete(data, indices_to_remove, axis=0)
-    print(f'num_one_targets: {num_one_targets}, data shape: {data.shape}')
-    print(f'===================== beginning of balanced data:\n{data[:5, :]}')
+    print(f'num_one_targets: {num_one_targets}, data shape after balancing: {data.shape}')
+    # print(f'===================== beginning of balanced data:\n{data[:5, :]}')
 
     # shuffle again because all the end are 1's
     data = shuffle_data(data)
 
     # scale the inputs
     preprocessing.scale(data[:, :-1], copy=False)
-    print(f'shapes after scaling: {data.shape}')
-    print(f'===================== beginning of scaled data:\n{data[:5, :]}')
+    # print(f'shapes after scaling: {data.shape}')
+    # print(f'===================== beginning of scaled data:\n{data[:5, :]}')
 
     # split into train, validate, test
     samples_count = data.shape[0]
@@ -128,6 +132,7 @@ def prepare_write_data(data):
     test_inputs = data[train_samples_count + validation_samples_count :, :-1]
     test_targets = data[train_samples_count + validation_samples_count:, -1]
 
+    """
     print(f'shapes train: train_inputs: {train_inputs.shape}, train_targets: {train_targets.shape}, '
           f'num 1s fraction: {round(int(sum(train_targets)) / train_targets.shape[0], 2)}')
     print(f'shapes validation: '
@@ -135,7 +140,7 @@ def prepare_write_data(data):
           f'num 1s fraction: {round(int(sum(validation_targets)) / validation_targets.shape[0], 2)}')
     print(f'shapes test: test_inputs: {test_inputs.shape}, test_targets: {test_targets.shape}, '
           f'num 1s fraction: {round(int(sum(test_targets)) / test_targets.shape[0], 2)}')
-
+    """
     # write to files
     np.savez(OUTPUT_TRAIN_FILE, inputs=train_inputs, targets=train_targets)
     np.savez(OUTPUT_VALID_FILE, inputs=validation_inputs, targets=validation_targets)
@@ -146,7 +151,7 @@ def read_npz_file(file_name):
     npz = np.load(file_name)
     inputs = npz['inputs'].astype(np.float)
     targets = npz['targets'].astype(np.int)
-    print(f'{file_name}: inputs.shape: {inputs.shape}, targets: {targets.shape}')
+    # print(f'{file_name}: inputs.shape: {inputs.shape}, targets: {targets.shape}')
     return inputs, targets
 
 
@@ -204,17 +209,6 @@ def single_model(train_inputs, train_targets, valid_inputs, valid_targets, test_
                                                       patience=in_dic['Validate loss improvement patience'],
                                                       restore_best_weights=in_dic['Restore best weights'])
 
-    print(f'train_inputs.shape: {train_inputs.shape}')
-    print(f'train_targets.shape: {train_targets.shape}')
-    print(f'batch_size: {in_dic["Batch size"]}')
-    print(f'valid_inputs.shape: {valid_inputs.shape}')
-    print(f'valid_targest.shape: {valid_targets.shape}')
-
-
-    print(f'train_inputs.shape: {train_inputs.shape}, train_targets.shape: {train_targets.shape}, '
-          f'batch_size: {in_dic["Batch size"]}, '
-          f'valid_inputs.shape: {valid_inputs.shape}, valid_targest.shape: {valid_targets.shape}')
-
     start = timer()
     history = model.fit(train_inputs,
                         train_targets,
@@ -231,19 +225,24 @@ def single_model(train_inputs, train_targets, valid_inputs, valid_targets, test_
     actual_num_epochs = len(history.history["val_accuracy"])
 
     # Prepare output of results - see explanation of outputs in README.md
-    out_dic['Test Accuracy'] = round(test_accuracy, 4)
-    out_dic['Test Loss'] = round(test_loss, 4)
-    out_dic['Train Time'] = round(end - start, 3)
-    out_dic['Loss * Time'] = round(out_dic['Test Loss'] * (end - start), 4)
-    out_dic['Validate Accuracy'] = history.history["val_accuracy"][-1].round(4)
-    out_dic['Train Accuracy'] = history.history["accuracy"][-1].round(4)
-    out_dic['Validate Loss'] = history.history["val_loss"][-1].round(4)
     out_dic['Train Loss'] = history.history["loss"][-1].round(4)
+    out_dic['Validate Loss'] = history.history["val_loss"][-1].round(4)
+    out_dic['Test Loss'] = round(test_loss, 4)
+    out_dic['Loss * Time'] = round(out_dic['Train Loss'] * (end - start), 4)
+    out_dic['Loss Product'] = round(out_dic['Train Loss'] * out_dic['Validate Loss'] * out_dic['Test Loss'], 4)
+    out_dic['Train Accuracy'] = history.history["accuracy"][-1].round(4)
+    out_dic['Validate Accuracy'] = history.history["val_accuracy"][-1].round(4)
+    out_dic['Test Accuracy'] = round(test_accuracy, 4)
+    out_dic['Train Time'] = round(end - start, 3)
     out_dic['Num epochs'] = actual_num_epochs
     out_dic['Average epoch time'] = round((end - start) / actual_num_epochs, 4)
 
     return out_dic
 
+def update_best(type, best_no_type, best_results):
+    best_with_type = {'Type': type}
+    best_with_type.update(best_no_type)
+    best_results.append(best_with_type)
 
 def do_numerous_loops(given_dic=None):
     """ Performs numerous models with different inputs / hyperparameters.
@@ -299,9 +298,11 @@ def do_numerous_loops(given_dic=None):
         in_dic['Loop'] = loop
         num_model_trainings_in_loop = 0
         # initiate best values that will be overridden when finding a good result
-        best_test_accuracy = {'Test Accuracy': 0.001}
+        best_train_loss = {'Train Loss': 100000}
+        best_validate_loss = {'Validate Loss': 100000}
         best_test_loss = {'Test Loss': 100000}
         best_loss_efficiency = {'Loss * Time': 100000}
+        best_loss_product = {'Loss Product': 100000}
 
         train_inputs, train_targets, valid_inputs, valid_targets, test_inputs, test_targets = prepare_data(data)
         for batch_size in local_batch_sizes:
@@ -355,28 +356,31 @@ def do_numerous_loops(given_dic=None):
                                         results.append(result)
                                         print(f'\nCURRENT: {result}')
 
-                                        if (result['Test Accuracy']) > best_test_accuracy['Test Accuracy']:
-                                            best_test_accuracy = result.copy()
+                                        if (result['Train Loss']) < best_train_loss['Train Loss']:
+                                            best_train_loss = result.copy()
+                                        if (result['Validate Loss']) < best_validate_loss['Validate Loss']:
+                                            best_validate_loss = result.copy()
                                         if (result['Test Loss']) < best_test_loss['Test Loss']:
                                             best_test_loss = result.copy()
                                         if (result['Loss * Time']) < best_loss_efficiency['Loss * Time']:
                                             best_loss_efficiency = result.copy()
+                                        if (result['Loss Product']) < best_loss_product['Loss Product']:
+                                            best_loss_product = result.copy()
+
 
         print("Finished loop +++++++++++++++++++++++++++++++++++++++++++++")
-        print(f'BEST TEST ACCURACY:     {best_test_accuracy}')
+        print(f'BEST TRAIN LOSS:        {best_train_loss}')
+        print(f'BEST VALIDATE LOSS:     {best_validate_loss}')
         print(f'BEST TEST LOSS:         {best_test_loss}')
         print(f'BEST LOSS EFFICIENCY:   {best_loss_efficiency}')
+        print(f'BEST LOSS PRODUCT:      {best_loss_product}')
 
-        best_test_accuracy_with_type = {'Type': 'TEST ACCURACY'}
-        best_test_accuracy_with_type.update(best_test_accuracy)
-        best_test_loss_with_type = {'Type': 'TEST LOSS'}
-        best_test_loss_with_type.update(best_test_loss)
-        best_loss_efficiency_with_type = {'Type': 'TEST LOSS EFFICIENCY'}
-        best_loss_efficiency_with_type.update(best_loss_efficiency)
+        update_best('TRAIN LOSS', best_train_loss, best_results)
+        update_best('VALIDATE LOSS', best_validate_loss, best_results)
+        update_best('TEST LOSS', best_test_loss, best_results)
+        update_best('LOSS EFFICIENCY', best_loss_efficiency, best_results)
+        update_best('LOSS PRODUCT', best_loss_product, best_results)
 
-        best_results.append(best_test_accuracy_with_type)
-        best_results.append(best_test_loss_with_type)
-        best_results.append(best_loss_efficiency_with_type)
 
     # Output all results to full.xlsx
     print('+++++++++++++++++++++++++++++++++++++++++++++++++++++')
@@ -435,7 +439,7 @@ def do_numerous_loops(given_dic=None):
     Values given below are for some of the best models
 """
 do_numerous_loops()
-# """
+"""
 do_numerous_loops({'Loops per model': 5,
                    'Validate loss improvement delta': 0.0001,
                    'Validate loss improvement patience': 10,
@@ -445,4 +449,4 @@ do_numerous_loops({'Loops per model': 5,
                    'Hidden funcs': ('relu', 'relu'),
                    'Hidden width': 450,
                    'Learning rate': 0.001})
-# """
+"""
