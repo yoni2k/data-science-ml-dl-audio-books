@@ -47,18 +47,18 @@ class config:
     loops_per_model = 5
 
     # validate_loss_improve_deltas = [0.0001, 0.00001]
-    validate_loss_improve_deltas = [0.0001]
+    validate_loss_improve_deltas = [0, 0.001, 0.0001]
 
     # validate_loss_improve_patiences = [7, 10, 15]
-    validate_loss_improve_patiences = [7]
+    validate_loss_improve_patiences = [2, 5, 10]
 
-    improve_restore_best_weights_values = [True]
+    improve_restore_best_weights_values = [True, False]
 
     # batch_sizes = [200, 400, 600]
-    batch_sizes = [100]
+    batch_sizes = [50, 100, 150]
 
     # hidden_widths = [200, 450, 784]
-    hidden_widths = [100]
+    hidden_widths = [50, 100, 150]
 
     nums_layers = [4]
 
@@ -67,7 +67,8 @@ class config:
 
     #learning_rates = [0.001, 0.0005, 0.00001]  # default in tf.keras.optimizers.Adam is 0.001
     # learning_rates = [0.001, 0.0005]  # default in tf.keras.optimizers.Adam is 0.001
-    learning_rates = [0.001]  # default in tf.keras.optimizers.Adam is 0.001
+    # learning_rates = [0.001]  # default in tf.keras.optimizers.Adam is 0.001
+    learning_rates = [0.001, 0.0001]  # default in tf.keras.optimizers.Adam is 0.001
 
 def acquire_preprocess_data():
     np.set_printoptions(formatter={'float': lambda x: "{0: 0.2f}".format(x)}, linewidth=120)
@@ -413,14 +414,6 @@ def do_numerous_loops(given_dic=None):
     print(f'HYPERPARAMS:')
     print(pf.to_string())
     pf.to_excel(writer, sheet_name='Hyperparams')
-
-    # Output all best results (in 3 categories, see explanation in README.md) to best.xlsx
-    best_test_accuracy_with_type = {'Type': 'TEST ACCURACY'}
-    best_test_accuracy_with_type.update(best_test_accuracy)
-    best_test_loss_with_type = {'Type': 'TEST LOSS'}
-    best_test_loss_with_type.update(best_test_loss)
-    best_loss_efficiency_with_type = {'Type': 'TEST LOSS EFFICIENCY'}
-    best_loss_efficiency_with_type.update(best_loss_efficiency)
 
     pf = pd.DataFrame(best_results)
     print(f'BEST RESULTS:')
