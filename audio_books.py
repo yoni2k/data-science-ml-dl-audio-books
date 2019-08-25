@@ -29,11 +29,7 @@ Outputs:
 - 0 - didn't come back
 
 TODOs:
-- Remove all references to "lecture" and duplicates of 2 ways to do something
-- Decide if putting seeds all over, or removing altogether 
-- Put all inputs and targets into 1 struct
 - 
-
 """
 
 VALIDATE_FRACTION = 0.1
@@ -270,8 +266,7 @@ def do_numerous_loops(num_loops=1, given_dic=None):
         local_learning_rates = [in_dic['Learning rate']]
     else:
         # MAX_NUM_EPOCHS is constant - no loops on different values
-        in_dic = {'Max num epochs': MAX_NUM_EPOCHS,
-                  'Shuffle seed': 100}
+        in_dic = {'Max num epochs': MAX_NUM_EPOCHS}
         local_validate_loss_improve_deltas = config.validate_loss_improve_deltas
         local_validate_loss_improve_patiences = config.validate_loss_improve_patiences
         local_improve_restore_best_weights_values = config.improve_restore_best_weights_values
@@ -302,7 +297,6 @@ def do_numerous_loops(num_loops=1, given_dic=None):
     time_run_started = timer()
 
     for loop in range(1, num_loops + 1):
-        in_dic['Shuffle seed'] = 1
         in_dic['Loop'] = loop
         num_model_trainings_in_loop = 0
         # initiate best values that will be overridden when finding a good result
