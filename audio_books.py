@@ -3,8 +3,6 @@ import pandas as pd
 import numpy as np
 import itertools
 import time
-from pprint import pprint
-import functools
 from sklearn import preprocessing
 import warnings
 with warnings.catch_warnings():
@@ -31,7 +29,6 @@ Outputs:
 - 0 - didn't come back
 
 TODOs:
-- Update requirements.txt
 - Remove all references to "lecture" and duplicates of 2 ways to do something
 - Decide if putting seeds all over, or removing altogether 
 - Put all inputs and targets into 1 struct

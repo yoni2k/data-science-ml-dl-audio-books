@@ -1,3 +1,5 @@
 tensorflow==2.0.0-beta1
 openpyxl
 pandas
+numpy
+sklearn
