@@ -46,31 +46,29 @@ OUTPUT_TRAIN_FILE = 'Audiobooks_data_train.npz'
 OUTPUT_VALID_FILE = 'Audiobooks_data_validation.npz'
 OUTPUT_TEST_FILE = 'Audiobooks_data_test.npz'
 
-# TODO - priority 3 - change to class to have all configurations together
-
-
 # Maximum number of epochs.  Currently by having a very high value, practically not used and relying on EarlyStopping.
 # See reasons in README.md
 MAX_NUM_EPOCHS = 1000
 
-validate_loss_improve_deltas = [0.0001, 0.00001]
+class config:
+    validate_loss_improve_deltas = [0.0001, 0.00001]
 
-# validate_loss_improve_patiences = [7, 10, 15]
-validate_loss_improve_patiences = [10, 15]
+    # validate_loss_improve_patiences = [7, 10, 15]
+    validate_loss_improve_patiences = [10, 15]
 
-improve_restore_best_weights_values = [True]
+    improve_restore_best_weights_values = [True]
 
-batch_sizes = [200, 400, 600]
+    batch_sizes = [200, 400, 600]
 
-hidden_widths = [200, 450, 784]
+    hidden_widths = [200, 450, 784]
 
-nums_layers = [4, 5]
+    nums_layers = [4, 5]
 
-functions = ['sigmoid', 'tanh', 'relu', 'softmax']
-functions = ['sigmoid', 'tanh', 'relu']
+    functions = ['sigmoid', 'tanh', 'relu', 'softmax']
+    functions = ['sigmoid', 'tanh', 'relu']
 
-#learning_rates = [0.001, 0.0005, 0.00001]  # default in tf.keras.optimizers.Adam is 0.001
-learning_rates = [0.001, 0.0005]  # default in tf.keras.optimizers.Adam is 0.001
+    #learning_rates = [0.001, 0.0005, 0.00001]  # default in tf.keras.optimizers.Adam is 0.001
+    learning_rates = [0.001, 0.0005]  # default in tf.keras.optimizers.Adam is 0.001
 
 def acquire_preprocess_data():
     np.set_printoptions(formatter={'float': lambda x: "{0: 0.2f}".format(x)}, linewidth=120)
@@ -275,14 +273,14 @@ def do_numerous_loops(num_loops=1, given_dic=None):
         # MAX_NUM_EPOCHS is constant - no loops on different values
         in_dic = {'Max num epochs': MAX_NUM_EPOCHS,
                   'Shuffle seed': 100}
-        local_validate_loss_improve_deltas = validate_loss_improve_deltas
-        local_validate_loss_improve_patiences = validate_loss_improve_patiences
-        local_improve_restore_best_weights_values = improve_restore_best_weights_values
-        local_batch_sizes = batch_sizes
-        local_hidden_widths = hidden_widths
-        local_nums_layers = nums_layers
-        local_functions = functions
-        local_learning_rates = learning_rates
+        local_validate_loss_improve_deltas = config.validate_loss_improve_deltas
+        local_validate_loss_improve_patiences = config.validate_loss_improve_patiences
+        local_improve_restore_best_weights_values = config.improve_restore_best_weights_values
+        local_batch_sizes = config.batch_sizes
+        local_hidden_widths = config.hidden_widths
+        local_nums_layers = config.nums_layers
+        local_functions = config.functions
+        local_learning_rates = config.learning_rates
 
     # For printing purposes, calculate number of models to be done
     #  (not including activation functions that are harder to calculate and also depend on number of layers)
