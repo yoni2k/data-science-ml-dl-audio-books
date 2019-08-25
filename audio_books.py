@@ -256,6 +256,8 @@ def do_numerous_loops(num_loops=1, given_dic=None):
         Outputs to output files - see README.md for explanation """
 
     results = []
+    best_results = []
+
     # Inputs are given in 2 ways:
     #  1. Mostly for local testing - explicit by giving given_dic, and only 1 run is done (possibly with numerous loops)
     #  2. By not giving given_dic, and then numerous inputs / hyperparameters are taken from the settings
@@ -295,78 +297,63 @@ def do_numerous_loops(num_loops=1, given_dic=None):
     print(f'To perform number regressions: {num_regressions_without_functions} '
           f'with layers: {local_nums_layers} and functions: {local_functions}')
 
-    # TODO 1 - search for mnist - remove
     # acquiring data is done once to save time
     data = acquire_preprocess_data()
 
-    # TODO 2 - debug and resolve best accuracies - seems there is a bug there with values, what gets saved etc.
-    # initiate best values that will be overridden when finding a good result
-    best_test_accuracy = {'Test Accuracy': 0.001}
-    best_test_loss = {'Test Loss': 100000}
-    best_loss_efficiency = {'Loss * Time': 100000}
+    num_model_trainings_total = 0
 
-    num_model_trainings = 0
     time_run_started = timer()
 
-    for batch_size in local_batch_sizes:
-        in_dic['Batch size'] = batch_size
-        if num_loops == 1:
-            # to save time not to do it every time if there is only 1 loop
-            in_dic['Shuffle seed'] = 1
-            # Shuffling is affected by 2 hyperparameters: batch_size (therefore needs to be done per batch size), and
-            #   Shuffle seed that changes per loop. Therefore needs to be done later in the loops pass,
-            #   however, if there is only 1 loop, shuffling can be done once here.
-            train_inputs, train_targets, valid_inputs, valid_targets, test_inputs, test_targets = \
-                prepare_data(data)
+    for loop in range(1, num_loops + 1):
+        in_dic['Shuffle seed'] = 1
+        in_dic['Loop'] = loop
+        num_model_trainings_in_loop = 0
+        # initiate best values that will be overridden when finding a good result
+        best_test_accuracy = {'Test Accuracy': 0.001}
+        best_test_loss = {'Test Loss': 100000}
+        best_loss_efficiency = {'Loss * Time': 100000}
 
-        for validate_loss_improve_delta in local_validate_loss_improve_deltas:
-            in_dic['Validate loss improvement delta'] = validate_loss_improve_delta
-            for validate_loss_improve_patience in local_validate_loss_improve_patiences:
-                in_dic['Validate loss improvement patience'] = validate_loss_improve_patience
-                for improve_restore_best_weights in local_improve_restore_best_weights_values:
-                    in_dic['Restore best weights'] = improve_restore_best_weights
-                    for num_layers in local_nums_layers:
-                        in_dic['Num layers'] = num_layers
-                        # if given specific run, don't do a product of all activation functions, otherwise perform
-                        #   a product of all activation functions to put each one of the functions in each hidden layer
-                        if not given_dic:
-                            funcs_product = itertools.product(local_functions, repeat=(num_layers - 2))
-                        else:
-                            funcs_product = [in_dic['Hidden funcs']]
-                        print(f'funcs_product: {funcs_product}')
-                        for hidden_funcs in funcs_product:
-                            in_dic['Hidden funcs'] = hidden_funcs
-                            for hidden_width in local_hidden_widths:
-                                in_dic['Hidden width'] = hidden_width
-                                for learning_rate in local_learning_rates:
-                                    in_dic['Learning rate'] = learning_rate
-                                    num_model_trainings += 1
-                                    # Accumulate values are used for multiple loops with same hyperparameters
-                                    #  (besides seed that's per loop)
-                                    accum_test_accuracy = 0
-                                    accum_test_loss = 0
-                                    accum_loss_efficiency = 0
+        train_inputs, train_targets, valid_inputs, valid_targets, test_inputs, test_targets = prepare_data(data)
+        for batch_size in local_batch_sizes:
+            in_dic['Batch size'] = batch_size
+            for validate_loss_improve_delta in local_validate_loss_improve_deltas:
+                in_dic['Validate loss improvement delta'] = validate_loss_improve_delta
+                for validate_loss_improve_patience in local_validate_loss_improve_patiences:
+                    in_dic['Validate loss improvement patience'] = validate_loss_improve_patience
+                    for improve_restore_best_weights in local_improve_restore_best_weights_values:
+                        in_dic['Restore best weights'] = improve_restore_best_weights
+                        for num_layers in local_nums_layers:
+                            in_dic['Num layers'] = num_layers
+                            # if given specific run, don't do a product of all activation functions
+                            # If not given specific run, perform a product of all activation functions
+                            #  to put each one of the functions in each hidden layer
+                            if not given_dic:
+                                funcs_product = itertools.product(local_functions, repeat=(num_layers - 2))
+                            else:
+                                funcs_product = [in_dic['Hidden funcs']]
+                            print(f'funcs_product: {funcs_product}')
+                            for hidden_funcs in funcs_product:
+                                in_dic['Hidden funcs'] = hidden_funcs
+                                for hidden_width in local_hidden_widths:
+                                    in_dic['Hidden width'] = hidden_width
+                                    for learning_rate in local_learning_rates:
+                                        in_dic['Learning rate'] = learning_rate
 
-                                    #initiate values to be used initiated inside the loops and used outside
-                                    # to quite a warning
-                                    result = {}
+                                        num_model_trainings_in_loop += 1
+                                        num_model_trainings_total += 1
 
-                                    for loop in range(1, num_loops+1):
-                                        if num_loops > 1:
-                                            # if more than 1 loops, to allow for different seed, prepare data per loop
-                                            in_dic['Shuffle seed'] = loop
-                                            train_inputs, train_targets, \
-                                                valid_inputs, valid_targets, \
-                                                test_inputs, test_targets = \
-                                                prepare_data(data)
+                                        train_inputs, train_targets, \
+                                            valid_inputs, valid_targets, \
+                                            test_inputs, test_targets = prepare_data(data)
 
                                         # Printing progress of epochs, models, time and loop
                                         time_running_sec = timer() - time_run_started
-                                        print(f'Model {num_model_trainings}, loop {loop}/{num_loops}, '
+                                        print(f'loop {loop}/{num_loops}, Model in loop {num_model_trainings_in_loop}, '
+                                              f'Model total: {num_model_trainings_total}, '
                                               f'total time min: {round(time_running_sec / 60, 1)}, '
                                               f'total time hours: {round(time_running_sec / 60 / 60, 2)}: '
-                                              f'seconds per model: {round(time_running_sec / num_model_trainings)} '
-                                              f'====================================')
+                                              f'seconds per model: {round(time_running_sec / num_model_trainings_total)}'
+                                              f' ====================================')
                                         out_dic = single_model(train_inputs, train_targets,
                                                                valid_inputs, valid_targets,
                                                                test_inputs, test_targets,
@@ -377,36 +364,32 @@ def do_numerous_loops(num_loops=1, given_dic=None):
                                         results.append(result)
                                         print(f'\nCURRENT: {result}')
 
-                                        # calculate total for all loops of same model
-                                        accum_test_accuracy += result['Test Accuracy']
-                                        accum_test_loss += result['Test Loss']
-                                        accum_loss_efficiency += result['Loss * Time']
+                                        if (result['Test Accuracy']) > best_test_accuracy['Test Accuracy']:
+                                            best_test_accuracy = result.copy()
+                                        if (result['Test Loss']) < best_test_loss['Test Loss']:
+                                            best_test_loss = result.copy()
+                                        if (result['Loss * Time']) < best_loss_efficiency['Loss * Time']:
+                                            best_loss_efficiency = result.copy()
 
-                                    # After finishing all loops for a given model,
-                                    #  update and print values of averages for loops - relevant only to
-                                    #  printing and outputting to file of best values.  Full contains all specific
-                                    #  runs of the loop
-                                    if (accum_test_accuracy / num_loops) > best_test_accuracy['Test Accuracy']:
-                                        best_test_accuracy = \
-                                            {'Average loop result': round(accum_test_accuracy / num_loops, 4)}
-                                        best_test_accuracy.update(result)
-                                    if (accum_test_loss / num_loops) < best_test_loss['Test Loss']:
-                                        best_test_loss = \
-                                            {'Average loop result': round(accum_test_loss / num_loops, 4)}
-                                        best_test_loss.update(result)
-                                    if (accum_loss_efficiency / num_loops) < best_loss_efficiency['Loss * Time']:
-                                        best_loss_efficiency = \
-                                            {'Average loop result': round(accum_loss_efficiency / num_loops, 4)}
-                                        best_loss_efficiency.update(result)
+        print("Finished loop +++++++++++++++++++++++++++++++++++++++++++++")
+        print(f'BEST TEST ACCURACY:     {best_test_accuracy}')
+        print(f'BEST TEST LOSS:         {best_test_loss}')
+        print(f'BEST LOSS EFFICIENCY:   {best_loss_efficiency}')
 
-                                    print("Finished all loops +++++++++++++++++++++++++++++++++++++++++++++")
-                                    print(f'BEST TEST ACCURACY:     {best_test_accuracy}')
-                                    print(f'BEST TEST LOSS:         {best_test_loss}')
-                                    print(f'BEST LOSS EFFICIENCY:   {best_loss_efficiency}')
+        best_test_accuracy_with_type = {'Type': 'TEST ACCURACY'}
+        best_test_accuracy_with_type.update(best_test_accuracy)
+        best_test_loss_with_type = {'Type': 'TEST LOSS'}
+        best_test_loss_with_type.update(best_test_loss)
+        best_loss_efficiency_with_type = {'Type': 'TEST LOSS EFFICIENCY'}
+        best_loss_efficiency_with_type.update(best_loss_efficiency)
+
+        best_results.append(best_test_accuracy_with_type)
+        best_results.append(best_test_loss_with_type)
+        best_results.append(best_loss_efficiency_with_type)
 
     # Output all results to full.xlsx
     print('+++++++++++++++++++++++++++++++++++++++++++++++++++++')
-    print(f'Total number of models trained: {num_model_trainings} with {num_loops} loops per model')
+    print(f'Total number of models trained: {num_model_trainings_in_loop} with {num_loops} loops per model')
     pf = pd.DataFrame(results)
     print(f'ALL RESULTS:')
     print(pf.to_string())
@@ -417,11 +400,11 @@ def do_numerous_loops(num_loops=1, given_dic=None):
 
     # Output all inputs / hyperparameters to hyperparams.xlsx
     hyperparams = {
-        'Num Model Trainings': num_model_trainings,
+        'Num Model Trainings': num_model_trainings_in_loop,
         'Num Loops per model': num_loops,
         'Total time minutes': round(time_running_sec / 60, 1),
         'Total time hours': round(time_running_sec / 60 / 60, 2),
-        'Seconds per model': round(time_running_sec / num_model_trainings),
+        'Seconds per model': round(time_running_sec / num_model_trainings_total),
         'Max Num Epochs': in_dic['Max num epochs'],
         'Batch sizes': local_batch_sizes,
         'Hidden Widths': local_hidden_widths,
@@ -445,9 +428,7 @@ def do_numerous_loops(num_loops=1, given_dic=None):
     best_loss_efficiency_with_type = {'Type': 'TEST LOSS EFFICIENCY'}
     best_loss_efficiency_with_type.update(best_loss_efficiency)
 
-    pf = pd.DataFrame([best_test_accuracy_with_type,
-                       best_test_loss_with_type,
-                       best_loss_efficiency_with_type])
+    pf = pd.DataFrame(best_results)
     print(f'BEST RESULTS:')
     print(pf.to_string())
     pf.to_excel(writer, sheet_name='Best')
@@ -469,7 +450,7 @@ def do_numerous_loops(num_loops=1, given_dic=None):
 # do_numerous_loops(1)
 """
 # """
-do_numerous_loops(1, {'Validate loss improvement delta': 0.0001,
+do_numerous_loops(3, {'Validate loss improvement delta': 0.0001,
                       'Validate loss improvement patience': 10,
                       'Restore best weights': True,
                       'Max num epochs': 1000,
