@@ -44,6 +44,8 @@ OUTPUT_TEST_FILE = 'Audiobooks_data_test.npz'
 MAX_NUM_EPOCHS = 1000
 
 class config:
+    loops_per_model = 5
+
     validate_loss_improve_deltas = [0.0001, 0.00001]
 
     # validate_loss_improve_patiences = [7, 10, 15]
@@ -205,20 +207,19 @@ def single_model(train_inputs, train_targets, valid_inputs, valid_targets, test_
     print(f'train_inputs.shape: {train_inputs.shape}')
     print(f'train_targets.shape: {train_targets.shape}')
     print(f'batch_size: {in_dic["Batch size"]}')
-    print(f'max_epochs: {in_dic["Max num epochs"]}')
     print(f'valid_inputs.shape: {valid_inputs.shape}')
     print(f'valid_targest.shape: {valid_targets.shape}')
 
 
     print(f'train_inputs.shape: {train_inputs.shape}, train_targets.shape: {train_targets.shape}, '
-          f'batch_size: {in_dic["Batch size"]}, max_epochs: {in_dic["Max num epochs"]}, '
+          f'batch_size: {in_dic["Batch size"]}, '
           f'valid_inputs.shape: {valid_inputs.shape}, valid_targest.shape: {valid_targets.shape}')
 
     start = timer()
     history = model.fit(train_inputs,
                         train_targets,
                         batch_size=in_dic['Batch size'],
-                        epochs=in_dic['Max num epochs'],
+                        epochs=MAX_NUM_EPOCHS,  # large value, practically not used
                         callbacks=[early_callback],
                         validation_data=(valid_inputs, valid_targets),
                         verbose=2)
@@ -244,7 +245,7 @@ def single_model(train_inputs, train_targets, valid_inputs, valid_targets, test_
     return out_dic
 
 
-def do_numerous_loops(num_loops=1, given_dic=None):
+def do_numerous_loops(given_dic=None):
     """ Performs numerous models with different inputs / hyperparameters.
         Outputs to output files - see README.md for explanation """
 
@@ -255,18 +256,17 @@ def do_numerous_loops(num_loops=1, given_dic=None):
     #  1. Mostly for local testing - explicit by giving given_dic, and only 1 run is done (possibly with numerous loops)
     #  2. By not giving given_dic, and then numerous inputs / hyperparameters are taken from the settings
     if given_dic:
-        in_dic = given_dic
-        local_validate_loss_improve_deltas = [in_dic['Validate loss improvement delta']]
-        local_validate_loss_improve_patiences = [in_dic['Validate loss improvement patience']]
-        local_improve_restore_best_weights_values = [in_dic['Restore best weights']]
-        local_batch_sizes = [in_dic['Batch size']]
-        local_hidden_widths = [in_dic['Hidden width']]
-        local_nums_layers = [in_dic['Num layers']]
-        local_functions = [in_dic['Hidden funcs']]
-        local_learning_rates = [in_dic['Learning rate']]
+        local_loops_per_model = given_dic['Loops per model']
+        local_validate_loss_improve_deltas = [given_dic['Validate loss improvement delta']]
+        local_validate_loss_improve_patiences = [given_dic['Validate loss improvement patience']]
+        local_improve_restore_best_weights_values = [given_dic['Restore best weights']]
+        local_batch_sizes = [given_dic['Batch size']]
+        local_hidden_widths = [given_dic['Hidden width']]
+        local_nums_layers = [given_dic['Num layers']]
+        local_functions = [given_dic['Hidden funcs']]
+        local_learning_rates = [given_dic['Learning rate']]
     else:
-        # MAX_NUM_EPOCHS is constant - no loops on different values
-        in_dic = {'Max num epochs': MAX_NUM_EPOCHS}
+        local_loops_per_model = config.loops_per_model
         local_validate_loss_improve_deltas = config.validate_loss_improve_deltas
         local_validate_loss_improve_patiences = config.validate_loss_improve_patiences
         local_improve_restore_best_weights_values = config.improve_restore_best_weights_values
@@ -278,13 +278,12 @@ def do_numerous_loops(num_loops=1, given_dic=None):
 
     # For printing purposes, calculate number of models to be done
     #  (not including activation functions that are harder to calculate and also depend on number of layers)
-    num_regressions_without_functions = num_loops * \
+    num_regressions_without_functions = local_loops_per_model * \
                                         len(local_validate_loss_improve_deltas) * \
                                         len(local_validate_loss_improve_patiences) * \
                                         len(local_improve_restore_best_weights_values) * \
                                         len(local_batch_sizes) * \
                                         len(local_hidden_widths) * \
-                                        len(local_nums_layers) * \
                                         len(local_learning_rates)
     print(f'To perform number regressions: {num_regressions_without_functions} '
           f'with layers: {local_nums_layers} and functions: {local_functions}')
@@ -293,10 +292,10 @@ def do_numerous_loops(num_loops=1, given_dic=None):
     data = acquire_preprocess_data()
 
     num_model_trainings_total = 0
-
     time_run_started = timer()
+    in_dic = {}
 
-    for loop in range(1, num_loops + 1):
+    for loop in range(1, local_loops_per_model + 1):
         in_dic['Loop'] = loop
         num_model_trainings_in_loop = 0
         # initiate best values that will be overridden when finding a good result
@@ -321,7 +320,7 @@ def do_numerous_loops(num_loops=1, given_dic=None):
                             if not given_dic:
                                 funcs_product = itertools.product(local_functions, repeat=(num_layers - 2))
                             else:
-                                funcs_product = [in_dic['Hidden funcs']]
+                                funcs_product = [given_dic['Hidden funcs']]
                             print(f'funcs_product: {funcs_product}')
                             for hidden_funcs in funcs_product:
                                 in_dic['Hidden funcs'] = hidden_funcs
@@ -337,9 +336,10 @@ def do_numerous_loops(num_loops=1, given_dic=None):
                                             valid_inputs, valid_targets, \
                                             test_inputs, test_targets = prepare_data(data)
 
-                                        # Printing progress of epochs, models, time and loop
+                                        # Printing progress of models, time and loop
                                         time_running_sec = timer() - time_run_started
-                                        print(f'loop {loop}/{num_loops}, Model in loop {num_model_trainings_in_loop}, '
+                                        print(f'loop {loop}/{local_loops_per_model}, '
+                                              f'Model in loop {num_model_trainings_in_loop}, '
                                               f'Model total: {num_model_trainings_total}, '
                                               f'total time min: {round(time_running_sec / 60, 1)}, '
                                               f'total time hours: {round(time_running_sec / 60 / 60, 2)}: '
@@ -380,7 +380,7 @@ def do_numerous_loops(num_loops=1, given_dic=None):
 
     # Output all results to full.xlsx
     print('+++++++++++++++++++++++++++++++++++++++++++++++++++++')
-    print(f'Total number of models trained: {num_model_trainings_in_loop} with {num_loops} loops per model')
+    print(f'Total number of models trained: {num_model_trainings_in_loop} with {local_loops_per_model} loops per model')
     pf = pd.DataFrame(results)
     print(f'ALL RESULTS:')
     print(pf.to_string())
@@ -392,11 +392,10 @@ def do_numerous_loops(num_loops=1, given_dic=None):
     # Output all inputs / hyperparameters to hyperparams.xlsx
     hyperparams = {
         'Num Model Trainings': num_model_trainings_in_loop,
-        'Num Loops per model': num_loops,
+        'Num Loops per model': local_loops_per_model,
         'Total time minutes': round(time_running_sec / 60, 1),
         'Total time hours': round(time_running_sec / 60 / 60, 2),
         'Seconds per model': round(time_running_sec / num_model_trainings_total),
-        'Max Num Epochs': in_dic['Max num epochs'],
         'Batch sizes': local_batch_sizes,
         'Hidden Widths': local_hidden_widths,
         'Nums layers': local_nums_layers,
@@ -430,24 +429,20 @@ def do_numerous_loops(num_loops=1, given_dic=None):
 """ Ways to run:
 1. Regular way - numerous models for later comparison between them.
     - Update settings / hyperparameters options from beginning of file.  Each combination will be done
-    - Run do_numerous_loops with given number of loops per model (usually 1 since very time consuming even with 1 loop)
-        and without a dictionary
+    - Run do_numerous_loops without params
 2. Debug / confirmation / researching one model way:
-    - Give number of loops (often > 1 to confirm behavior / results)
     - Give explicit dictionary of model to run
     Values given below are for some of the best models
 """
-"""
-# do_numerous_loops(1)
-"""
+do_numerous_loops()
 # """
-do_numerous_loops(3, {'Validate loss improvement delta': 0.0001,
-                      'Validate loss improvement patience': 10,
-                      'Restore best weights': True,
-                      'Max num epochs': 1000,
-                      'Batch size': 450,  # 200
-                      'Num layers': 4,
-                      'Hidden funcs': ('relu', 'relu'),
-                      'Hidden width': 450,
-                      'Learning rate': 0.001})
+do_numerous_loops({'Loops per model': 5,
+                   'Validate loss improvement delta': 0.0001,
+                   'Validate loss improvement patience': 10,
+                   'Restore best weights': True,
+                   'Batch size': 450,
+                   'Num layers': 4,
+                   'Hidden funcs': ('relu', 'relu'),
+                   'Hidden width': 450,
+                   'Learning rate': 0.001})
 # """
