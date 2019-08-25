@@ -2,6 +2,8 @@ from timeit import default_timer as timer
 import pandas as pd
 import numpy as np
 import itertools
+from datetime import datetime
+import time
 from pprint import pprint
 import functools
 from sklearn import preprocessing
@@ -406,13 +408,12 @@ def do_numerous_loops(num_loops=1, given_dic=None):
 
     # Output all results to full.xlsx
     # TODO 2 - write in different sheets of the same file
-    # TODO 2- improve the time part of the file
     print('+++++++++++++++++++++++++++++++++++++++++++++++++++++')
     print(f'Total number of models trained: {num_model_trainings} with {num_loops} loops per model')
     pf = pd.DataFrame(results)
     print(f'ALL RESULTS:')
     print(pf.to_string())
-    pf.to_excel(f'output/full_{timer()}_.xlsx')
+    pf.to_excel(f'output/full_{time.strftime("%Y_%m_%d_%H_%M_%S")}_.xlsx')
 
     time_running_sec = timer() - time_run_started
 
@@ -436,7 +437,7 @@ def do_numerous_loops(num_loops=1, given_dic=None):
     pf = pd.DataFrame([hyperparams])
     print(f'HYPERPARAMS:')
     print(pf.to_string())
-    pf.to_excel(f'output/hyperparams{timer()}_.xlsx')
+    pf.to_excel(f'output/hyperparams_{time.strftime("%Y_%m_%d_%H_%M_%S")}_.xlsx')
 
     # Output all best results (in 3 categories, see explanation in README.md) to best.xlsx
     best_test_accuracy_with_type = {'Type': 'TEST ACCURACY'}
@@ -451,7 +452,7 @@ def do_numerous_loops(num_loops=1, given_dic=None):
                        best_loss_efficiency_with_type])
     print(f'BEST RESULTS:')
     print(pf.to_string())
-    pf.to_excel(f'output/best{timer()}_.xlsx')
+    pf.to_excel(f'output/best_{time.strftime("%Y_%m_%d_%H_%M_%S")}_.xlsx')
 
 
 """ Ways to run:
