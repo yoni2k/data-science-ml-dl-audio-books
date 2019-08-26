@@ -47,15 +47,16 @@ class config:
     loops_per_model = 5
 
     # validate_loss_improve_deltas = [0.0001, 0.00001]
-    validate_loss_improve_deltas = [0, 0.001, 0.0001]
+    validate_loss_improve_deltas = [0, 0.00005, 0.0001]
     # validate_loss_improve_deltas = [0.0001]
 
     # validate_loss_improve_patiences = [7, 10, 15]
-    validate_loss_improve_patiences = [2, 5, 10]
+    # validate_loss_improve_patiences = [2, 5, 10]
     # validate_loss_improve_patiences = [7]
+    validate_loss_improve_patiences = [5, 7]
 
-    improve_restore_best_weights_values = [True, False]
-    # improve_restore_best_weights_values = [True]
+    # improve_restore_best_weights_values = [True, False]
+    improve_restore_best_weights_values = [True]
 
     # batch_sizes = [200, 400, 600]
     # batch_sizes = [50, 100, 150]
@@ -449,7 +450,7 @@ do_numerous_loops({'Loops per model': 5,  # 5
                    'Restore best weights': True,
                    'Batch size': 3580,
                    'Num layers': 4,
-                   'Hidden funcs': ('relu', 'relu'),
-                   'Hidden width': 100,
+                   'Hidden funcs': ('relu', 'tanh'),
+                   'Hidden width': 200,
                    'Learning rate': 0.001})  # default 0.001
 """

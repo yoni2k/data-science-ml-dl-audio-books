@@ -229,3 +229,44 @@
 ### Conclusions going forward:
 - Leave width 200, change to functions ('relu', 'tanh'), work for now with ('relu', 'relu') to find best patience, then go back to ('relu', 'tanh')
 
+## Conclusions 32 - Finding best early stopping: patience and delta, and whether to return to original weights 
+- Local run
+- Lowest training loss - more loops, 0 delta and 10 patience
+- Lowest test loss - low delta (0 or 0.0001), many loops - 5 or 10.  4/5 - restore weights
+- Restore - patience - delta: Results looking at test loss and test accuracy:
+    - False - 2 - 0.001 - very bad
+    - False - 2 - 0.0001 - some bad, some OK
+    - False - 2 - 0 - a few bad, a few OK
+    - False - 5 - 0.001 - very bad
+    - False - 5 - 0.0001 - some bad, some OK
+    - False - 5 - 0 - a few bad, a few OK
+    - False - 10 - 0.001 - pretty bad, some OK
+    - False - 10 - 0.0001 - some bad, some good
+    - False - 10 - 0 - some bad, some good
+    - True - 2 - 0.001 - bad 
+    - True - 2 - 0.0001 - some bad, some OK
+    - True - 2 - 0 - pretty good
+    - True - 5 - 0.001 - bad
+    - True - 5 - 0.0001 - some bad, some great
+    - True - 5 - 0 - some great
+    - True - 10 - 0.001 - most bad
+    - True - 10 - 0.0001 - some bad, some OK
+    - True - 10 - 0 - some good, some bad
+- Test Loss - best 5 observations ~ 5%
+    - 4 True, 1 False (not returning to weights seems sometimes great results, sometimes less). 
+    - Patience - 3 of 5, 1 of 10
+    - Delta - 2 of 0.0001 and 2 of 0
+- Test accuracy - best 6 observations
+    - 5/6 True
+    - 3/5 of 5, and 2/5 of 10 patience
+    - Half 0 and half 0.0001 delta
+### Conclusions going forward:
+- Seems delta 0.001 is out of question, 0.0001 and 0 are pretty equal.  However: 
+    - Time with 0 is 19.7 on average - we are paying for all those not converging
+    - Time with 0.0001 is 15.3 on average
+    - Therefore, stay with 0.0001 when checking different options, and with 0 when looking at just one option
+- Patience - 5 and 10 is not conclusive.  Possibly need a value in the middle.  
+    - Try 7 and 5 and see if one of them is better
+    - Patience 5 - average time 14.3
+    - Patience 10 - average time 16.4
+- Return to best weights - doesn't seem to make a huge difference, possibly True is slightly better, but not critical 
