@@ -92,3 +92,10 @@
 - Time: ~ 5.2 on average 
 ### Conclusions going forward:
 - Seems 25 width is too small (and slower). Try much higher, above 450 that was tried before
+
+## Conclusions 16 - width larger - 600 
+- Local run
+- Currently concentrating on train loss: ~.82.8
+- Time: ~ 3.5 on average 
+### Conclusions going forward:
+- Either same or worse than 450. Try even higher
