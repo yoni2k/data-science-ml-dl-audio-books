@@ -15,10 +15,17 @@
 - Need to try with a lot of different params
 
 ## Conclusions 5 - baseline for relu
-- Batch sizes	Hidden Widths	Nums layers	Functions	Learning rates	Improvement deltas	Improvement patience	Improvement restore weights
-    [100]	    [100]	        [4]	        ['relu']	[0.0001]	    [0.001]	            [5]                     [True]
+- Batch sizes	Hidden Widths	Nums layers	Functions	        Learning rates	Improvement deltas	Improvement patience	Improvement restore weights
+  [450]	        [450]	        [4]         [('relu', 'relu')]	[0.001]	        [0.0001]	        [10]	                [True]
 - Local run
-- Currently concentrating on train loss: ~.81 (.80-.82)
-- Time: ~ 5.4 on average 
+- Currently concentrating on train loss: ~.82
+- Time: ~ 2.5 on average 
 ### Conclusions going forward:
 - Use as a baseline
+
+## Conclusions 6 - smaller batch size - 200
+- Local run
+- Currently concentrating on train loss: ~.81.3
+- Time: ~ 3.6 on average 
+### Conclusions going forward:
+- Takes more time, loss is slightly worse, but not conclusive, try higher
