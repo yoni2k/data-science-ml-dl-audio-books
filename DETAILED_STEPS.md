@@ -65,4 +65,10 @@
 ### Conclusions going forward:
 - Seems that going to smaller width didn't cause worse results, go down more
 
+## Conclusions 12 - width smaller - 200 
+- Local run
+- Currently concentrating on train loss: ~.827
+- Time: ~ 3.2 on average 
+### Conclusions going forward:
+- Not conclusive, but seems worse both accuracy-wise and time-wise, try even lower
 
