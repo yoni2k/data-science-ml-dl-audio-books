@@ -72,3 +72,11 @@
 ### Conclusions going forward:
 - Not conclusive, but seems worse both accuracy-wise and time-wise, try even lower
 
+## Conclusions 13 - width smaller - 100 
+- Local run
+- Currently concentrating on train loss: ~.827
+- Time: ~ 2.4 on average 
+### Conclusions going forward:
+- Not conclusive, but seems there is no difference between 100 and 200, but quicker, go down more
+
+
