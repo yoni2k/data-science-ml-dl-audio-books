@@ -79,4 +79,10 @@
 ### Conclusions going forward:
 - Not conclusive, but seems there is no difference between 100 and 200, but quicker, go down more
 
+## Conclusions 14 - width smaller - 50 
+- Local run
+- Currently concentrating on train loss: ~.83
+- Time: ~ 4.1 on average 
+### Conclusions going forward:
+- Not conclusive, but seems there is no difference between 200, 100 and 50, but slower, go down more
 
