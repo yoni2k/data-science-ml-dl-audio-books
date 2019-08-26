@@ -67,99 +67,105 @@
 
 ## Conclusions 12 - width smaller - 200 
 - Local run
-- Currently concentrating on train loss: ~.827
+- Currently concentrating on train accuracy: ~.827
 - Time: ~ 3.2 on average 
 ### Conclusions going forward:
 - Not conclusive, but seems worse both accuracy-wise and time-wise, try even lower
 
 ## Conclusions 13 - width smaller - 100 
 - Local run
-- Currently concentrating on train loss: ~.827
+- Currently concentrating on train accuracy: ~.827
 - Time: ~ 2.4 on average 
 ### Conclusions going forward:
 - Not conclusive, but seems there is no difference between 100 and 200, but quicker, go down more
 
 ## Conclusions 14 - width smaller - 50 
 - Local run
-- Currently concentrating on train loss: ~.83
+- Currently concentrating on train accuracy: ~.83
 - Time: ~ 4.1 on average 
 ### Conclusions going forward:
 - Not conclusive, but seems there is no difference between 200, 100 and 50, but slower, go down more
 
 ## Conclusions 15 - width smaller - 25 
 - Local run
-- Currently concentrating on train loss: ~.82.1
+- Currently concentrating on train accuracy: ~.82.1
 - Time: ~ 5.2 on average 
 ### Conclusions going forward:
 - Seems 25 width is too small (and slower). Try much higher, above 450 that was tried before
 
 ## Conclusions 16 - width larger - 600 
 - Local run
-- Currently concentrating on train loss: ~.82.8
+- Currently concentrating on train accuracy: ~.82.8
 - Time: ~ 3.5 on average 
 ### Conclusions going forward:
 - Either same or worse than 450. Try even higher
 
 ## Conclusions 17 - width larger - 800 
 - Local run
-- Currently concentrating on train loss: ~.83
+- Currently concentrating on train accuracy: ~.83
 - Time: ~ 5.1 on average 
 ### Conclusions going forward:
 - Same as 450, go higher
 
 ## Conclusions 18 - width larger - 1200 
 - Local run
-- Currently concentrating on train loss: ~.83
+- Currently concentrating on train accuracy: ~.83
 - Time: ~ 14 on average 
 ### Conclusions going forward:
 - Going even higher than 1000 gives similar results but much slower.  Stay with width 100 - seems fast and good results.  Enough opportunities for connections of 10 inputs
 
 ## Conclusions 19 - learning rate 0.0001 instead of default 0.001 
 - Local run
-- Currently concentrating on train loss: ~.821
+- Currently concentrating on train accuracy: ~.821
 - Time: ~ 12 on average 
 ### Conclusions going forward:
 - Seems worse accuracy, but much slower, try value in between 0.0005
 
 ## Conclusions 20 - learning rate 0.0005 instead of default 0.001 
 - Local run
-- Currently concentrating on train loss: ~.832
+- Currently concentrating on train accuracy: ~.832
 - Time: ~ 4.6 on average 
 ### Conclusions going forward:
 - Seems same or slightly better than 0.001, and slightly faster? Try, 0.0003 and 0.0007
 
 ## Conclusions 21 - learning rate 0.0003 instead of default 0.001 
 - Local run
-- Currently concentrating on train loss: ~.836
+- Currently concentrating on train accuracy: ~.836
 - Time: ~ 6 on average 
 ### Conclusions going forward:
 - Slower but slightly better - try higher rate than 0.001 - 0.0015 
 
 ## Conclusions 22 - learning rate 0.0015 instead of default 0.001 
 - Local run
-- Currently concentrating on train loss: ~.834
+- Currently concentrating on train accuracy: ~.834
 - Time: ~ 2.3 on average 
 ### Conclusions going forward:
 - Much faster, seems not worse, but possibly even better (although probably luck). Try going even higher - 0.003 
 
 ## Conclusions 24 - learning rate 0.005 instead of default 0.001 
 - Local run
-- Currently concentrating on train loss: ~.825
+- Currently concentrating on train accuracy: ~.825
 - Time: ~ 1 on average 
 ### Conclusions going forward:
 - Much faster, slightly worse accuracy-wise, try to go even higher, maybe there is a different minimum 
 
 ## Conclusions 25 - learning rate 0.01 instead of default 0.001 
 - Local run
-- Currently concentrating on train loss: ~.821
+- Currently concentrating on train accuracy: ~.821
 - Time: ~ 0.8 on average 
 ### Conclusions going forward:
 - Stay for now with 0.001 that is not as good as 0.0003 but faster, and not much worse
 
 ## Conclusions 26 - patience very large and delta very small - continue much more 
 - Local run
-- Currently concentrating on train loss: ~.827
+- Currently concentrating on train accuracy: ~.827
 - Time: ~ 2.7 on average 
 ### Conclusions going forward:
 - Doesn't seem that it's number of epochs that are missing
  
+## Conclusions 27 - 5 layers with given best parameters 
+- Local run
+- Currently concentrating on train accuracy: ~.82
+- Time: ~ 7.3 on average 
+### Conclusions going forward:
+- Much slower - worse accuracy wise with current other hyperparameters
