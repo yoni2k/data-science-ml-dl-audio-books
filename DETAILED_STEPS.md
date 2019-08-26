@@ -141,3 +141,10 @@
 - Time: ~ 2.3 on average 
 ### Conclusions going forward:
 - Much faster, seems not worse, but possibly even better (although probably luck). Try going even higher - 0.003 
+
+## Conclusions 22 - learning rate 0.003 instead of default 0.001 
+- Local run
+- Currently concentrating on train loss: ~.832
+- Time: ~ 1.3 on average 
+### Conclusions going forward:
+- Much faster, doesn't seem worse, try going up even more 
