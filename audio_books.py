@@ -444,7 +444,7 @@ do_numerous_loops({'Loops per model': 3,  # 5
                    'Validate loss improvement delta': 0.0001,
                    'Validate loss improvement patience': 10,
                    'Restore best weights': True,
-                   'Batch size': 600,
+                   'Batch size': 1000,
                    'Num layers': 4,
                    'Hidden funcs': ('relu', 'relu'),
                    'Hidden width': 450,
