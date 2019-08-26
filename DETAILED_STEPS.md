@@ -128,3 +128,9 @@
 ### Conclusions going forward:
 - Seems same or slightly better than 0.001, and slightly faster? Try, 0.0003 and 0.0007
 
+## Conclusions 21 - learning rate 0.0003 instead of default 0.001 
+- Local run
+- Currently concentrating on train loss: ~.836
+- Time: ~ 6 on average 
+### Conclusions going forward:
+- Slower but slightly better - try higher rate than 0.001 - 0.0015 
