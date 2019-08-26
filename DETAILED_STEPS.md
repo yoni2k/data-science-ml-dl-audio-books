@@ -184,3 +184,39 @@
 - Almost all runs ran up to maximum 1000 epochs 
 ### Conclusions going forward:
 - Enlarge number of epochs to 2000
+
+## Conclusions 29 - 4 layers different activation functions - 2000 epochs 
+- Local run
+- Best Training accuracies are around .83
+- Activation functions
+    - Some of the best are (relu, relu), or (relu, tanh), or (tanh, relu)
+        - training time around 18 seconds
+        - Usually didn't need more epochs
+    - Sigmoid as first never gave anything above .81 (time ~21 seconds average)
+    - Sigmoid last gave decent, but not very consistent results (time ~21 seconds average)
+    - Softmax as first never gave anything above .79 with very long training times (under 30 seconds)
+    - Softmax as last got .80-.81, very long (just under 30 seconds)
+### Conclusions going forward:
+- For now work only with relu & tanh, later return others
+
+## Conclusions 30 - 4 layers different params, funcs relu and tanh - 2000 epochs 
+- Local run
+- Minimal Train loss - .31
+- Maximum Train accuracy - .839 
+- Top Train accuracy - 2% - 16 results 
+    - Batch size [100, 300, 3580] - almost always 3580, (one 100, one 300)
+    - Activation functions ['relu', 'tanh']
+        - relu always first
+        - relu mostly second (4/16 have tanh second, although there the results are better)
+    - Width [50, 100, 300]
+        - 50 - 1/16
+        - 100 - 6/16
+        - 300 - 9/16
+    - Learning rate [0.0001, 0.0005, 0.001, 0.005]
+        - 0.001 - have half the results, rest - spread evenly
+    - Time 8 seconds average (2-24)
+    - None needed extra epochs - 320 on average, large STD  
+### Conclusions going forward:
+- Can stay with learning rate 0.001
+- Can stay with batch size 3580
+- Width 100, 300 - not clear what's better, or maybe even more, try 200, 400

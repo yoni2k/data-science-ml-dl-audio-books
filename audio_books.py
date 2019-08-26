@@ -59,16 +59,18 @@ class config:
 
     # batch_sizes = [200, 400, 600]
     # batch_sizes = [50, 100, 150]
-    batch_sizes = [3580]
+    # batch_sizes = [100, 300, 3580]  # 3580
+    batch_sizes = [3580]  # 3580
 
     # hidden_widths = [200, 450, 784]
     # hidden_widths = [50, 100, 150]
-    hidden_widths = [100]
+    hidden_widths = [200, 300, 400]  # 100
 
     nums_layers = [4]
 
-    functions = ['sigmoid', 'tanh', 'relu', 'softmax']
+    # functions = ['sigmoid', 'tanh', 'relu', 'softmax']
     # functions = ['sigmoid', 'tanh', 'relu']
+    functions = ['relu', 'tanh']
     # functions = ['relu']
 
     #learning_rates = [0.001, 0.0005, 0.00001]  # default in tf.keras.optimizers.Adam is 0.001
@@ -76,6 +78,7 @@ class config:
     # learning_rates = [0.001]  # default in tf.keras.optimizers.Adam is 0.001
     # learning_rates = [0.001, 0.0001]  # default in tf.keras.optimizers.Adam is 0.001
     learning_rates = [0.0001]  # default in tf.keras.optimizers.Adam is 0.001
+    # learning_rates = [0.0001, 0.0003, 0.001, 0.005]  # default in tf.keras.optimizers.Adam is 0.001
 
 def acquire_preprocess_data():
     np.set_printoptions(formatter={'float': lambda x: "{0: 0.2f}".format(x)}, linewidth=120)
