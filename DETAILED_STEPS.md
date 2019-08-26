@@ -113,3 +113,10 @@
 - Time: ~ 14 on average 
 ### Conclusions going forward:
 - Going even higher than 1000 gives similar results but much slower.  Stay with width 100 - seems fast and good results.  Enough opportunities for connections of 10 inputs
+
+## Conclusions 19 - learning rate 0.0001 instead of default 0.001 
+- Local run
+- Currently concentrating on train loss: ~.821
+- Time: ~ 12 on average 
+### Conclusions going forward:
+- Seems worse accuracy, but much slower, try value in between 0.0005

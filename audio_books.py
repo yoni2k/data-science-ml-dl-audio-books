@@ -448,5 +448,5 @@ do_numerous_loops({'Loops per model': 3,  # 5
                    'Num layers': 4,
                    'Hidden funcs': ('relu', 'relu'),
                    'Hidden width': 100,
-                   'Learning rate': 0.0001}) # default 0.001
+                   'Learning rate': 0.0005}) # default 0.001
 # """
