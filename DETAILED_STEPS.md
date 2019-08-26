@@ -58,3 +58,11 @@
 ### Conclusions going forward:
 - No batches seems better, stay with it for now, but don't give up batch sizes completely
 
+## Conclusions 11 - width smaller - 300 
+- Local run
+- Currently concentrating on train loss: ~.83
+- Time: ~ 2.5 on average 
+### Conclusions going forward:
+- Seems that going to smaller width didn't cause worse results, go down more
+
+
