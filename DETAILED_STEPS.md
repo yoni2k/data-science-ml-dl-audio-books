@@ -142,9 +142,24 @@
 ### Conclusions going forward:
 - Much faster, seems not worse, but possibly even better (although probably luck). Try going even higher - 0.003 
 
-## Conclusions 23 - learning rate 0.005 instead of default 0.001 
+## Conclusions 24 - learning rate 0.005 instead of default 0.001 
 - Local run
 - Currently concentrating on train loss: ~.825
 - Time: ~ 1 on average 
 ### Conclusions going forward:
 - Much faster, slightly worse accuracy-wise, try to go even higher, maybe there is a different minimum 
+
+## Conclusions 25 - learning rate 0.01 instead of default 0.001 
+- Local run
+- Currently concentrating on train loss: ~.821
+- Time: ~ 0.8 on average 
+### Conclusions going forward:
+- Stay for now with 0.001 that is not as good as 0.0003 but faster, and not much worse
+
+## Conclusions 26 - patience very large and delta very small - continue much more 
+- Local run
+- Currently concentrating on train loss: ~.827
+- Time: ~ 2.7 on average 
+### Conclusions going forward:
+- Doesn't seem that it's number of epochs that are missing
+ 

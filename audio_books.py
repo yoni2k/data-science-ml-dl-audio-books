@@ -52,24 +52,24 @@ class config:
 
     # validate_loss_improve_patiences = [7, 10, 15]
     # validate_loss_improve_patiences = [2, 5, 10]
-    validate_loss_improve_patiences = [5]
+    validate_loss_improve_patiences = [7]
 
     # improve_restore_best_weights_values = [True, False]
     improve_restore_best_weights_values = [True]
 
     # batch_sizes = [200, 400, 600]
     # batch_sizes = [50, 100, 150]
-    batch_sizes = [100]
+    batch_sizes = [3580]
 
     # hidden_widths = [200, 450, 784]
     # hidden_widths = [50, 100, 150]
     hidden_widths = [100]
 
-    nums_layers = [4]
+    nums_layers = [5]
 
-    # functions = ['sigmoid', 'tanh', 'relu', 'softmax']
+    functions = ['sigmoid', 'tanh', 'relu', 'softmax']
     # functions = ['sigmoid', 'tanh', 'relu']
-    functions = ['relu']
+    # functions = ['relu']
 
     #learning_rates = [0.001, 0.0005, 0.00001]  # default in tf.keras.optimizers.Adam is 0.001
     # learning_rates = [0.001, 0.0005]  # default in tf.keras.optimizers.Adam is 0.001
@@ -438,8 +438,8 @@ def do_numerous_loops(given_dic=None):
     - Give explicit dictionary of model to run
     Values given below are for some of the best models
 """
-# do_numerous_loops()
-# """
+do_numerous_loops()
+"""
 do_numerous_loops({'Loops per model': 3,  # 5
                    'Validate loss improvement delta': 0.0001,
                    'Validate loss improvement patience': 10,
@@ -448,5 +448,5 @@ do_numerous_loops({'Loops per model': 3,  # 5
                    'Num layers': 4,
                    'Hidden funcs': ('relu', 'relu'),
                    'Hidden width': 100,
-                   'Learning rate': 0.01}) # default 0.001
-# """
+                   'Learning rate': 0.001}) # default 0.001
+"""
