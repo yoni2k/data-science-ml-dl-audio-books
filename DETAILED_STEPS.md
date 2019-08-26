@@ -86,3 +86,9 @@
 ### Conclusions going forward:
 - Not conclusive, but seems there is no difference between 200, 100 and 50, but slower, go down more
 
+## Conclusions 15 - width smaller - 25 
+- Local run
+- Currently concentrating on train loss: ~.82.1
+- Time: ~ 5.2 on average 
+### Conclusions going forward:
+- Seems 25 width is too small (and slower). Try much higher, above 450 that was tried before
