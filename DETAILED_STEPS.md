@@ -36,3 +36,10 @@
 - Time: ~ 4.7 on average 
 ### Conclusions going forward:
 - Takes more time, but better accuracy, try higher
+
+## Conclusions 8 - larger batch size - 1000
+- Local run
+- Currently concentrating on train loss: ~.82.7
+- Time: ~ 4.5 on average 
+### Conclusions going forward:
+- Not conclusive if better or worse, try even higher
