@@ -270,3 +270,13 @@
     - Patience 5 - average time 14.3
     - Patience 10 - average time 16.4
 - Return to best weights - doesn't seem to make a huge difference, possibly True is slightly better, but not critical 
+
+## Conclusions 33 - Finding best early stopping: patience and delta - more fine tuning 
+- Local run
+- Best 10% loss / accuracy - 4 observation
+    - 3/4 - patience 7, another 5
+    - 3/4 - improvement 0.00005, another 0
+- Delta 0.00005 with patience 7 - average time 17.5, delta 0.0001 - average time 15.1
+### Conclusions going forward:
+- Leave patience 7 and delta 0.00005 for final rounds
+- Not for final rounds, patience 5 and delta 0.0001 is also good enough

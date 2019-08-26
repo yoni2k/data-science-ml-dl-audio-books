@@ -47,13 +47,13 @@ class config:
     loops_per_model = 5
 
     # validate_loss_improve_deltas = [0.0001, 0.00001]
-    validate_loss_improve_deltas = [0, 0.00005, 0.0001]
+    # validate_loss_improve_deltas = [0, 0.00005, 0.0001]
+    validate_loss_improve_deltas = [0.00005]  # could also work with 0.0001
     # validate_loss_improve_deltas = [0.0001]
 
-    # validate_loss_improve_patiences = [7, 10, 15]
-    # validate_loss_improve_patiences = [2, 5, 10]
-    # validate_loss_improve_patiences = [7]
-    validate_loss_improve_patiences = [5, 7]
+    # validate_loss_improve_patiences = [5, 7, 10]
+    # validate_loss_improve_patiences = [5]
+    validate_loss_improve_patiences = [7]  # could also work with 5
 
     # improve_restore_best_weights_values = [True, False]
     improve_restore_best_weights_values = [True]
@@ -70,9 +70,8 @@ class config:
     nums_layers = [4]
 
     # functions = ['sigmoid', 'tanh', 'relu', 'softmax']
-    # functions = ['sigmoid', 'tanh', 'relu']
-    # functions = ['relu', 'tanh']  # ===================== best
-    functions = ['relu']
+    functions = ['relu', 'tanh']  # ===================== best
+    # functions = ['relu']
 
     #learning_rates = [0.001, 0.0005, 0.00001]  # default in tf.keras.optimizers.Adam is 0.001
     # learning_rates = [0.001, 0.0005]  # default in tf.keras.optimizers.Adam is 0.001
@@ -442,10 +441,10 @@ def do_numerous_loops(given_dic=None):
     - Give explicit dictionary of model to run
     Values given below are for some of the best models
 """
-do_numerous_loops()
-"""
-do_numerous_loops({'Loops per model': 5,  # 5
-                   'Validate loss improvement delta': 0.0001,
+# do_numerous_loops()
+# """
+do_numerous_loops({'Loops per model': 10,  # 5
+                   'Validate loss improvement delta': 0.00005,  # 0.0001
                    'Validate loss improvement patience': 7,
                    'Restore best weights': True,
                    'Batch size': 3580,
@@ -453,4 +452,4 @@ do_numerous_loops({'Loops per model': 5,  # 5
                    'Hidden funcs': ('relu', 'tanh'),
                    'Hidden width': 200,
                    'Learning rate': 0.001})  # default 0.001
-"""
+# """
