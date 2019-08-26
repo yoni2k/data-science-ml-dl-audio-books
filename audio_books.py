@@ -44,11 +44,11 @@ OUTPUT_TEST_FILE = 'Audiobooks_data_test.npz'
 MAX_NUM_EPOCHS = 1000
 
 class config:
-    loops_per_model = 3
+    loops_per_model = 5
 
     # validate_loss_improve_deltas = [0.0001, 0.00001]
     # validate_loss_improve_deltas = [0, 0.001, 0.0001]
-    validate_loss_improve_deltas = [0.001]
+    validate_loss_improve_deltas = [0.0001]
 
     # validate_loss_improve_patiences = [7, 10, 15]
     # validate_loss_improve_patiences = [2, 5, 10]
@@ -65,7 +65,7 @@ class config:
     # hidden_widths = [50, 100, 150]
     hidden_widths = [100]
 
-    nums_layers = [5]
+    nums_layers = [4]
 
     functions = ['sigmoid', 'tanh', 'relu', 'softmax']
     # functions = ['sigmoid', 'tanh', 'relu']
@@ -440,13 +440,13 @@ def do_numerous_loops(given_dic=None):
 """
 do_numerous_loops()
 """
-do_numerous_loops({'Loops per model': 3,  # 5
+do_numerous_loops({'Loops per model': 5,  # 5
                    'Validate loss improvement delta': 0.0001,
-                   'Validate loss improvement patience': 10,
+                   'Validate loss improvement patience': 7,
                    'Restore best weights': True,
                    'Batch size': 3580,
                    'Num layers': 4,
                    'Hidden funcs': ('relu', 'relu'),
                    'Hidden width': 100,
-                   'Learning rate': 0.001}) # default 0.001
+                   'Learning rate': 0.001})  # default 0.001
 """

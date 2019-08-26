@@ -169,3 +169,13 @@
 - Time: ~ 7.3 on average 
 ### Conclusions going forward:
 - Much slower - worse accuracy wise with current other hyperparameters
+
+## Conclusions 28 - 4 layers 5 loops baseline 
+- Local run
+- Currently concentrating on train accuracy: ~.826 (.818-.833)
+- Validate accuracy - 80.6 (but it's the last one, the one taken is possibly better)
+- Test accuracy - 81.1 - possible overfitting
+- Time: ~2 on average 
+### Conclusions going forward:
+- Much slower - worse accuracy wise with current other hyperparameters
+
