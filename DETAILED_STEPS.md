@@ -177,5 +177,10 @@
 - Test accuracy - 81.1 - possible overfitting
 - Time: ~2 on average 
 ### Conclusions going forward:
-- Much slower - worse accuracy wise with current other hyperparameters
+- Try other activation functions, decide which ones leaving, and run with other different parameters
 
+## Conclusions 28 - 4 layers different activation functions 
+- Local run
+- Almost all runs ran up to maximum 1000 epochs 
+### Conclusions going forward:
+- Enlarge number of epochs to 2000

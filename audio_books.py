@@ -41,7 +41,7 @@ OUTPUT_TEST_FILE = 'Audiobooks_data_test.npz'
 
 # Maximum number of epochs.  Currently by having a very high value, practically not used and relying on EarlyStopping.
 # See reasons in README.md
-MAX_NUM_EPOCHS = 1000
+MAX_NUM_EPOCHS = 2000
 
 class config:
     loops_per_model = 5
