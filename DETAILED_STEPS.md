@@ -220,3 +220,12 @@
 - Can stay with learning rate 0.001
 - Can stay with batch size 3580
 - Width 100, 300 - not clear what's better, or maybe even more, try 200, 400
+
+## Conclusions 31 - 4 layers different widths 200,300,400, funcs relu and tanh - 2000 epochs 
+- Local run
+- Top 10% of train accuracy and bottom 10% of train loss - always 200 and 400, with slightly more 400s
+- Time - 400 takes longer (29 vs 21 seconds)
+- Winning function - ('relu', 'tanh') with width 200
+### Conclusions going forward:
+- Leave width 200, change to functions ('relu', 'tanh'), work for now with ('relu', 'relu') to find best patience, then go back to ('relu', 'tanh')
+

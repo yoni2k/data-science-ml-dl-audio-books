@@ -47,15 +47,15 @@ class config:
     loops_per_model = 5
 
     # validate_loss_improve_deltas = [0.0001, 0.00001]
-    # validate_loss_improve_deltas = [0, 0.001, 0.0001]
-    validate_loss_improve_deltas = [0.0001]
+    validate_loss_improve_deltas = [0, 0.001, 0.0001]
+    # validate_loss_improve_deltas = [0.0001]
 
     # validate_loss_improve_patiences = [7, 10, 15]
-    # validate_loss_improve_patiences = [2, 5, 10]
-    validate_loss_improve_patiences = [7]
+    validate_loss_improve_patiences = [2, 5, 10]
+    # validate_loss_improve_patiences = [7]
 
-    # improve_restore_best_weights_values = [True, False]
-    improve_restore_best_weights_values = [True]
+    improve_restore_best_weights_values = [True, False]
+    # improve_restore_best_weights_values = [True]
 
     # batch_sizes = [200, 400, 600]
     # batch_sizes = [50, 100, 150]
@@ -64,14 +64,14 @@ class config:
 
     # hidden_widths = [200, 450, 784]
     # hidden_widths = [50, 100, 150]
-    hidden_widths = [200, 300, 400]  # 100
+    hidden_widths = [200]  # 100
 
     nums_layers = [4]
 
     # functions = ['sigmoid', 'tanh', 'relu', 'softmax']
     # functions = ['sigmoid', 'tanh', 'relu']
-    functions = ['relu', 'tanh']
-    # functions = ['relu']
+    # functions = ['relu', 'tanh']  # ===================== best
+    functions = ['relu']
 
     #learning_rates = [0.001, 0.0005, 0.00001]  # default in tf.keras.optimizers.Adam is 0.001
     # learning_rates = [0.001, 0.0005]  # default in tf.keras.optimizers.Adam is 0.001
