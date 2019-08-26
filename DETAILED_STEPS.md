@@ -99,3 +99,10 @@
 - Time: ~ 3.5 on average 
 ### Conclusions going forward:
 - Either same or worse than 450. Try even higher
+
+## Conclusions 17 - width larger - 800 
+- Local run
+- Currently concentrating on train loss: ~.83
+- Time: ~ 5.1 on average 
+### Conclusions going forward:
+- Same as 450, go higher
