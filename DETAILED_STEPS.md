@@ -106,3 +106,10 @@
 - Time: ~ 5.1 on average 
 ### Conclusions going forward:
 - Same as 450, go higher
+
+## Conclusions 18 - width larger - 1200 
+- Local run
+- Currently concentrating on train loss: ~.83
+- Time: ~ 14 on average 
+### Conclusions going forward:
+- Going even higher than 1000 gives similar results but much slower.  Stay with width 100 - seems fast and good results.  Enough opportunities for connections of 10 inputs
