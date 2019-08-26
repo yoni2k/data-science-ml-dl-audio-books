@@ -280,3 +280,11 @@
 ### Conclusions going forward:
 - Leave patience 7 and delta 0.00005 for final rounds
 - Not for final rounds, patience 5 and delta 0.0001 is also good enough
+
+## Conclusions 34 - Many loops with the best function 
+- Local run
+-   Batch sizes	Hidden Widths	Nums layers	Functions	Learning rates	Improvement deltas	Improvement patience	Improvement restore weights
+    [3580]	    [200]	        [4] [('relu', 'tanh')]	[0.001]	        [5e-05]	            [7]	                    [True]
+- Train accuracy 83.1 (82.5 - 83.9) - last, not real (better than real), since weights are taken from before
+- Validate accuracy 82.0 - not real (potentially worse than real, since in the end could get worse), since weights are returned to best validation loss
+- Test accuracy ~81 (76-84)
